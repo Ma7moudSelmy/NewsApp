@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/Widgets/CategoryListView.dart';
-import 'package:news_app/Widgets/News.dart';
+import 'package:news_app/widgets/categories_list_view.dart';
+
+import '../widgets/news_list_view_builder.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -9,30 +10,50 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: const Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text('News', style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              'News',
+              style: TextStyle(color: Colors.black),
+            ),
             Text(
               'Cloud',
-              style: TextStyle(
-                color: Colors.orange,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(color: Colors.orange),
             ),
           ],
         ),
-   
-      ),backgroundColor: const Color.fromARGB(255, 209, 210, 216),
-      body: Column(
-        children: [
-          CategoryListView(),
-          Expanded(child: News1()),
-        ],
-      )
-      
+      ),
+      body: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+
+        child: CustomScrollView(
+          physics: BouncingScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(child: CategoriesListView()),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 32,
+              ),
+            ),
+            NewsListViewBuilder(
+              category: 'general',
+            ),
+          ],
+        ),
+        // child: Column(
+        //   children: [
+        //     CategoriesListView(),
+        //     SizedBox(
+        //       height: 32,
+        //     ),
+        //     Expanded(child: NewsListView()),
+        //   ],
+        // ),
+      ),
     );
   }
 }
-
-

@@ -1,20 +1,21 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:news_app/services/Newsservices.dart';
+import 'package:news_app/models/article_model.dart';
+
 
 class News extends StatelessWidget {
-  const News({super.key});
-
+  const News({super.key ,required this.articlesmodels});
+final ArticleModel articlesmodels;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Image.asset("assets/download.jpeg"),
+          child: Image.network(articlesmodels.image!),
         ),
         Text(
-          "بيان عاجل للزراعة بعد رصد حالات مصابة بالحمى القلاعية في بعض الدول",
+          articlesmodels.title,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
 
@@ -24,10 +25,7 @@ class News extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 30),
-          child: Text(
-            "عاجل هي صحيفة إلكترونية سعودية، تأسست في عام 2007، حاصلة على ترخيص من وزارة الثقافة والإعلام السعودية، وحلت صحيفة عاجل الإلكترونية في المركز الثاني بين المواقع الإخبارية السعودية من حيث عدد الزيارة بحسب إحصاء الموقع العالمي أليكسا المتخصص في إحصائيات وترتيب مواقع الإنترنت.",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+         
         ),
         Padding(
           padding: const EdgeInsets.all(60),
@@ -40,31 +38,52 @@ class News extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        Text(
-          "Ma7moudSelmy",
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.orange,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        
       ],
+    );
+    
+  }
+}
+
+class News1 extends StatefulWidget {
+  const News1({super.key});
+
+  @override
+  State<News1> createState() => _News1State();
+}
+
+class _News1State extends State<News1> {
+  List<ArticleModel> articles = [];
+
+  @override
+  void initState() {
+    super.initState();
+    Newsservices(Dio()).getNews().then((news) {
+      setState(() {
+        articles = news;
+      });
+    }).catchError((e) {
+      print("Error: $e");
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(),
+      itemCount: 10, 
+      itemBuilder: (context, index) {
+        return News(
+          articlesmodels: articles[index],
+        );
+      },
     );
   }
 }
 
-class News1 extends StatelessWidget {
-  const News1({super.key});
-  @override
-  Widget build(BuildContext context) {
-    Newsservices(Dio()).getNews();
-
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      itemCount: 10,
-      itemBuilder: (context, index) {
-        return News();
-      },
-    );
-  }
+class Newsservices {
+  Newsservices(Dio dio);
+  
+  getNews() {}
+  
 }

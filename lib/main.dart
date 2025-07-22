@@ -1,22 +1,17 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:news_app/Views/Home_View.dart';
-import 'package:news_app/services/Newsservices.dart';
-
+import 'package:news_app/views/home_view.dart';
 void main() {
-  Newsservices(Dio()).getNews();
-  runApp(MyWidget());
+  runApp(const NewsApp());
 }
 
-final dio = Dio();
-
-
-
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
+class NewsApp extends StatelessWidget {
+  const NewsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: HomeView());
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomeView(),
+    );
   }
 }
